@@ -10,6 +10,16 @@ Utfila er ~25 MB, men likevel behøver man ca. 5 GB diskplass til prosessering.
 
 Inneholder alle stedsnavn på følgende format
 
+| Kolonner   | Beskrivelse                                       |
+| ---------- | ------------------------------------------------- |
+| Prioritet  | Bokstav fra A-N hvor N er viktigst (Navn på land) |
+| Kategori   | Kategorisering i 3 nivå av hva navet beskriver    |
+| Lengdegrad | Koordinat på desimalform EPSG:4326                |
+| Breddegrad | Koordinat på desimalform EPSG:4326                |
+| Navn       | Det primære stedsnavnet                           |
+
+#### Eksempel
+
 | Prioritet | Kategori | Breddegrad | Lengdegrad | Navn             |
 | --------- | -------- | ---------- | ---------- | ---------------- |
 | E         | 11       | 17.3354    | 68.30591   | Storberget       |
@@ -18,12 +28,6 @@ Inneholder alle stedsnavn på følgende format
 | C         | 3        | 14.63289   | 68.54859   | Taen             |
 | G         | 7        | 20.25671   | 69.6817    | Koppangen        |
 | H         | 35       | 10.84147   | 60.64473   | Lensbygda        |
-
-- Prioritet: Bokstav fra A-N hvor N er viktigst (Navn på land)
-- Kategori: Kategorisering i 3 nivå av hva navet beskriver
-- Lengdegrad: Koordinat på desimalform EPSG:4326
-- Breddegrad: Koordinat på desimalform EPSG:4326
-- Navn: Det primære stedsnavnet
 
 ### kategori.json
 
