@@ -34,10 +34,10 @@ oboe(fs.createReadStream("./data/4326.geojson", { encoding: "utf8" }))
     const line = `${p.sortering.replace(
       "viktighet",
       ""
-    )}${category} ${round_to_precision(coord[0], 5)}  ${round_to_precision(
+    )}${category} ${round_to_precision(coord[0], 5)} ${round_to_precision(
       coord[1],
       5
-    )}  ${p.komplettskrivemåte[0]}`;
+    )} ${p.komplettskrivemåte[0]}`;
 
     ws.write(line + "\n");
     return oboe.drop;
