@@ -2,23 +2,28 @@
 
 Laster stedsnavn fra sentralt stedsnavn register (SSR). Data brukes av [stedsnavn-api](https://github.com/Artsdatabanken/stedsnavn-api)
 
-Utfila er mindre enn 50MB, men likevel behøver man ca. 5 GB diskplass til prosessering.
+Utfila er ~25 MB, men likevel behøver man ca. 5 GB diskplass til prosessering.
 
 ## Målfiler
 
 ### steder.json
 
-Inneholder alle stedsnavn.
+Inneholder alle stedsnavn på følgende format
 
-```
-E11 17.3354  68.30591  Storberget
-D14 17.32879  68.3137  Erikelva
-E2 15.01159  68.83431  Bakkejordstabben
-C3 14.63289  68.54859  Taen
-G7 20.25671  69.6817  Koppangen
-H35 10.84147  60.64473  Lensbygda
+| Prioritet | Kategori | Breddegrad | Lengdegrad | Navn             |
+| --------- | -------- | ---------- | ---------- | ---------------- |
+| E         | 11       | 17.3354    | 68.30591   | Storberget       |
+| D         | 14       | 17.32879   | 68.3137    | Erikelva         |
+| E         | 2        | 15.01159   | 68.83431   | Bakkejordstabben |
+| C         | 3        | 14.63289   | 68.54859   | Taen             |
+| G         | 7        | 20.25671   | 69.6817    | Koppangen        |
+| H         | 35       | 10.84147   | 60.64473   | Lensbygda        |
 
-```
+- Prioritet: Bokstav fra A-N hvor N er viktigst (Navn på land)
+- Kategori: Kategorisering i 3 nivå av hva navet beskriver
+- Lengdegrad: Koordinat på desimalform EPSG:4326
+- Breddegrad: Koordinat på desimalform EPSG:4326
+- Navn: Det primære stedsnavnet
 
 ### kategori.json
 
