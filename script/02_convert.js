@@ -31,18 +31,22 @@ oboe(fs.createReadStream("./data/4326.geojson", { encoding: "utf8" }))
     if (coord[0] == -50210 && coord[1] == 6772591) return oboe.drop; // Feilplassert
     if (coord[0] == -40879 && coord[1] == 6650995) return oboe.drop; // Feilplassert
 
+    const stedsnummer = p.stedsnavnnummer[0] - 1;
+    const x = p.komplettskrivemåte;
+    const y = p["komplettskrivemåte"];
+    const navn = p.komplettskrivemåte[stedsnummer];
     const line = `${p.sortering.replace(
       "viktighet",
       ""
     )}${category} ${round_to_precision(coord[0], 5)} ${round_to_precision(
       coord[1],
       5
-    )} ${p.komplettskrivemåte[0]}`;
+    )} ${navn}`;
 
     ws.write(line + "\n");
     return oboe.drop;
   })
   .done(() => {
     ws.close();
-    lastejobb.io.skrivBuildfil("typer.json", JSON.stringify(typer));
+    lastejobb.io.skrivBuildfil("typer.json", typer);
   });
