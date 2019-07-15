@@ -10,7 +10,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "lastejobb": "^1.23.1",
+    "lastejobb": "^1.23.2",
     "oboe": "^2.1.4"
   }
 }
