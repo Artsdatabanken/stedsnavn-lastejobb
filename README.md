@@ -4,6 +4,10 @@ Laster stedsnavn fra sentralt stedsnavn register (SSR). Data brukes av [stedsnav
 
 Utfila er ~25 MB, men likevel behøver man ca. 5 GB diskplass til prosessering.
 
+## Kildedata
+
+* [Produktspesifikasjon](https://register.geonorge.no/data/documents/Produktspesifikasjoner_Stedsnavn_v2_produktspesifikasjon-kartverket-stedsnavn-5_0_.pdf)
+
 ## Målfiler
 
 ### steder.json
