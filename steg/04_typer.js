@@ -2,8 +2,7 @@ const lastejobb = require("lastejobb");
 const fs = require("fs");
 var parseString = require("xml2js").parseString;
 
-const autor2kode = {};
-const kode2autor = {};
+const autor2kode = lastejobb.io.lesDatafil("autor2kode");
 
 // Ustabil link, manuell download: https://register.geonorge.no/register/versjoner/produktspesifikasjoner/kartverket/stedsnavn-for-vanlig-bruk (GML-skjema)
 const xsd = fs.readFileSync("kildedata/StedsnavnForVanligBruk.xsd", "utf8");
@@ -13,7 +12,7 @@ const r = {};
 parseString(xsd, function(err, result) {
   const schema = result.schema;
   schema.simpleType.forEach(t => map(t));
-  lastejobb.io.skrivDatafil("objektyper.json", r);
+  lastejobb.io.skrivBuildfil("type.json", r);
 });
 
 function map(t) {
@@ -29,7 +28,7 @@ function mapEnum(t, nivå) {
   return t.map(src => {
     const kodeautor = src["$"].value;
     const e = {
-      //      kode: getKode(forelder.kodeautor, kodeautor),
+      kode: autor2kode[kodeautor],
       kodeautor,
       nivå
     };
@@ -41,21 +40,4 @@ function mapEnum(t, nivå) {
     if (r[e.kodeautor]) throw new Error();
     r[e.kodeautor] = e;
   });
-}
-
-function getKode(nivå, kodeautor) {
-  if (!autor2kode[nivå]) autor2kode[nivå] = {};
-  const dict = autor2kode[nivå];
-  const ka = kodeautor.toUpperCase();
-  if (dict[kodeautor]) throw new Error();
-  for (let x = 0; x < ka.length - 2; x++)
-    for (let y = x + 1; y < ka.length - 1; y++) {
-      const kode = ka[x] + ka[y];
-      if (!kode2autor[kode]) {
-        kode2autor[kode] = kodeautor;
-        autor2kode[kodeautor] = kode;
-        return kode;
-      }
-    }
-  throw new Error();
 }

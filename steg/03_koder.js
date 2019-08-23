@@ -2,42 +2,39 @@ const lastejobb = require("lastejobb");
 
 const typer = lastejobb.io.lesDatafil("typer.json");
 
-const koder = {};
+const kode2autor = {};
+const autor2kode = {};
 
 assignKode(typer);
-lastejobb.io.skrivBuildfil("koder", koder);
+lastejobb.io.skrivDatafil("kode2autor", kode2autor);
+lastejobb.io.skrivDatafil("autor2kode", autor2kode);
 
-function assignKode(src, prefix = "") {
+function assignKode(src, prefix = "SN") {
   const keys = Object.keys(src).sort((a, b) => a.length - b.length);
-  keys.forEach(key => {
-    const kode = makeCode(prefix, key);
-    if (!kode) debugger;
-    assignKode(src[key], kode);
+  keys.forEach(kodeAutor => {
+    const kode = makeCode(prefix, kodeAutor);
+    kode2autor[kode] = kodeAutor;
+    autor2kode[kodeAutor] = kode;
+
+    assignKode(src[kodeAutor], kode);
   });
 }
 
 function makeCode(prefix, key) {
   key = splitWords(key);
   let r = prefix && prefix + "-";
-  if (key.indexOf("Kultur Institusjoner") >= 0) debugger;
   for (var i = 0; i < key.length; i++) {
     const ch = key[i];
     if (ch !== ch.toUpperCase()) continue;
     if (ch === " ") continue;
     r += ch;
-    if (!koder[r]) {
-      koder[r] = key;
-      return r;
-    }
+    if (!kode2autor[r]) return r;
   }
 
   for (var i = 1; i <= key.length; i++) {
     let r = prefix && prefix + "-";
     r += key.substring(0, i).toUpperCase();
-    if (!koder[r]) {
-      koder[r] = key;
-      return r;
-    }
+    if (!kode2autor[r]) return r;
   }
 
   throw new Error("Fant ingen brukandes kode for " + key);
