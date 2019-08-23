@@ -10,7 +10,9 @@ const xsd = fs.readFileSync("kildedata/StedsnavnForVanligBruk.xsd", "utf8");
 
 const r = {
   SN: {
-    tittel: { nb: "Stedsnavn" }
+    tittel: { nb: "Sted" },
+    nivå: "Steder",
+    farge: "#cecece"
   }
 };
 
