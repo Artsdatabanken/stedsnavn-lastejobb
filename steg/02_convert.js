@@ -47,5 +47,5 @@ oboe(fs.createReadStream("./data/4326.geojson", { encoding: "utf8" }))
   })
   .done(() => {
     ws.close();
-    lastejobb.io.skrivBuildfil("typer.json", typer);
+    lastejobb.io.skrivDatafil("typer.json", typer);
   });
