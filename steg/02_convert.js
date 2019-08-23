@@ -2,6 +2,7 @@ const oboe = require("oboe");
 const fs = require("fs");
 const category = require("../category");
 const lastejobb = require("lastejobb");
+
 const typer = category.create();
 
 function round_to_precision(x, precision) {
@@ -16,13 +17,11 @@ oboe(fs.createReadStream("./data/4326.geojson", { encoding: "utf8" }))
     if (e.geometry.type !== "Point") return oboe.drop;
     const p = e.properties;
     if (!p.komplettskrivemåte) return oboe.drop;
-    const catString =
-      p.navneobjekthovedgruppe +
-      "_" +
-      p.navneobjektgruppe +
-      "_" +
-      p.navneobjekttype;
-    const category = typer.add(catString);
+    const category = typer.add(
+      p.navneobjekthovedgruppe,
+      p.navneobjektgruppe,
+      p.navneobjekttype
+    );
     const coord = e.geometry.coordinates;
     if (coord[0] == 229378 && coord[1] == 6950049) return oboe.drop; // Feilplassert
     if (coord[0] == 107355 && coord[1] == 7008055) return oboe.drop; // Feilplassert
