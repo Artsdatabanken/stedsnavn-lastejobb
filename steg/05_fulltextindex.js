@@ -10,11 +10,10 @@ function lesKat2kode() {
   const r = {};
   invert(r, t);
   const autor2kode = lastejobb.io.lesDatafil("autor2kode.json");
-  const typer = lastejobb.io.lesBuildfil("type.json");
   const s = {};
   Object.entries(r).forEach(([k, v]) => {
     const kode = autor2kode[v];
-    s[k] = typer[kode];
+    s[k] = kode;
   });
   return s;
 }
@@ -35,12 +34,13 @@ lastejobb.io.skrivBuildfil("full-text-index-sted.json", fti);
 function index(sted) {
   if (sted.length <= 4) return; // EOF
   const [kk, lng, lat, stedsnummer, navn] = sted;
-  const type = kat2kode[kk.substring(1)];
+  const kode = kat2kode[kk.substring(1)];
+  if (!kode) debugger;
   const prio = kk[0];
   fti[stedsnummer] = {
     hit: {
-      kode: type.kode,
-      url: `${type.url}?lng=${lng}&lat=${lat}`,
+      kode: kode,
+      url: `Sted?lng=${lng}&lat=${lat}`,
       title: navn
     },
     text: {
