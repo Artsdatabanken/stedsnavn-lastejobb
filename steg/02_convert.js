@@ -4,7 +4,6 @@ const category = require("../category");
 const lastejobb = require("lastejobb");
 
 const typer = category.create();
-const fti = {};
 
 function round_to_precision(x, precision) {
   const scaler = Math.pow(10, precision);
@@ -36,27 +35,14 @@ oboe(fs.createReadStream("./data/4326.geojson", { encoding: "utf8" }))
     const viktighet = p.sortering.replace("viktighet", "");
     const lng = round_to_precision(coord[0], 5);
     const lat = round_to_precision(coord[1], 5);
-    const line = `${viktighet}${categoryId} ${lng} ${lat} ${navn}`;
+    const line = `${viktighet}${categoryId} ${lng} ${lat} ${
+      p.stedsnummer
+    } ${navn}`;
 
-    fti[p.stedsnummer] = {
-      hit: {
-        kode: "SN-" + p.stedsnummer,
-        url: `?lng=${lng}&lat=${lat}`,
-        title: navn
-      },
-      [viktighetTilScore(viktighet)]: [navn]
-    };
     ws.write(line + "\n");
     return oboe.drop;
   })
   .done(() => {
     ws.close();
-    lastejobb.io.skrivBuildfil("typer.json", typer);
-    lastejobb.io.skrivBuildfil("fulltextindex.json", typer);
+    lastejobb.io.skrivDatafil("typer.json", typer);
   });
-
-function viktighetTilScore(v) {
-  const diff = "O".charCodeAt(0) - v.charCodeAt(0);
-  const score = 1000 - diff * 30;
-  return score;
-}
