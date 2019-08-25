@@ -22,5 +22,5 @@ oboe(fs.createReadStream("./data/4326.geojson", { encoding: "utf8" }))
     return oboe.drop;
   })
   .done(() => {
-    lastejobb.io.skrivDatafil(__filename, kategori);
+    lastejobb.io.skrivDatafil("inn_kategori", kategori);
   });

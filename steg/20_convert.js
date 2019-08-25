@@ -1,9 +1,8 @@
 const oboe = require("oboe");
 const fs = require("fs");
-const category = require("../category");
 const lastejobb = require("lastejobb");
 
-const typer = category.create();
+const kategori2id = lastejobb.io.lesDatafil("inn_kategori");
 
 function round_to_precision(x, precision) {
   const scaler = Math.pow(10, precision);
@@ -17,11 +16,11 @@ oboe(fs.createReadStream("./data/4326.geojson", { encoding: "utf8" }))
     if (e.geometry.type !== "Point") return oboe.drop;
     const p = e.properties;
     if (!p.komplettskrivemåte) return oboe.drop;
-    const categoryId = typer.add(
-      p.navneobjekthovedgruppe,
-      p.navneobjektgruppe,
-      p.navneobjekttype
-    );
+    const categoryId =
+      kategori2id[p.navneobjekthovedgruppe][p.navneobjektgruppe][
+        p.navneobjekttype
+      ];
+
     const coord = e.geometry.coordinates;
     if (coord[0] == 229378 && coord[1] == 6950049) return oboe.drop; // Feilplassert
     if (coord[0] == 107355 && coord[1] == 7008055) return oboe.drop; // Feilplassert
@@ -44,5 +43,4 @@ oboe(fs.createReadStream("./data/4326.geojson", { encoding: "utf8" }))
   })
   .done(() => {
     ws.close();
-    lastejobb.io.skrivDatafil("typer.json", typer);
   });
