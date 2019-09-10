@@ -9,7 +9,7 @@ const id2kode = {};
 assignKode(typer);
 lastejobb.io.skrivDatafil("kode2autor", kode2autor);
 lastejobb.io.skrivDatafil("autor2kode", autor2kode);
-lastejobb.io.skrivDatafil("id2kode", id2kode);
+lastejobb.io.skrivBuildfil("id2kode", id2kode);
 
 function assignKode(src, prefix = "SN") {
   const keys = Object.keys(src).sort((a, b) => a.length - b.length);
