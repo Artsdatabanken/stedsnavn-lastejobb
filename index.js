@@ -1,6 +1,5 @@
 if (!process.env.DEBUG) process.env.DEBUG = "*";
 const { kjørLastejobberUnder } = require("lastejobb");
 
-process.env.BUILD = "./build";
-
-kjørLastejobberUnder("steg/");
+const scripPath = "stages/" + (process.argv[2] || "");
+kjørLastejobberUnder(scripPath);

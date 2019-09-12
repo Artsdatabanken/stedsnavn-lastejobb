@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "node index.js",
+    "download": "node index download",
+    "transform": "node --max_old_space_size=8192 index transform",
+    "build": "npm run extract && npm run transform",
     "deploy": "./deploy.sh",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
