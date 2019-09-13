@@ -1,17 +1,16 @@
 const lastejobb = require("lastejobb");
-const log = lastejobb.log;
 const fs = require("fs");
 
 const steder = fs.readFileSync("build/steder.json", "utf8").split("\n");
 const kat2kode = lesKat2kode();
 
 function lesKat2kode() {
-  const t = lastejobb.io.lesDatafil("typer.json");
-  const r = {};
-  invert(r, t);
+  const autorkode2index = lastejobb.io.lesDatafil("inn_kategori.json");
+  const kode2autor = {};
+  invert(kode2autor, autorkode2index);
   const autor2kode = lastejobb.io.lesDatafil("autor2kode.json");
   const s = {};
-  Object.entries(r).forEach(([k, v]) => {
+  Object.entries(kode2autor).forEach(([k, v]) => {
     const kode = autor2kode[v];
     s[k] = kode;
   });
@@ -52,6 +51,6 @@ function index(sted) {
 function viktighetTilScore(v) {
   if (!v) debugger;
   const diff = "O".charCodeAt(0) - v.charCodeAt(0);
-  const score = 1000 - diff * 30;
+  const score = 900 - diff * 40;
   return score;
 }
