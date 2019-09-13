@@ -31,11 +31,14 @@ steder.forEach(s => index(s.split(" ")));
 lastejobb.io.skrivBuildfil("full-text-index-sted.json", fti);
 
 function index(sted) {
-  if (sted.length <= 4) return; // EOF
-  const [kk, lng, lat, stedsnummer, navn] = sted;
+  if (sted.length < 5) return; // EOF
+  const [kk, lng, lat, stedsnummer, ...navnArr] = sted;
   const kode = kat2kode[kk.substring(1)];
+  const navn = navnArr.join(" ");
   if (!kode) debugger;
+  if (navn === "Trondheim") debugger;
   const prio = kk[0];
+  if (prio > "G" && navn.indexOf("rondheim") > 0) debugger;
   fti[stedsnummer] = {
     hit: {
       kode: kode,
@@ -51,6 +54,6 @@ function index(sted) {
 function viktighetTilScore(v) {
   if (!v) debugger;
   const diff = "O".charCodeAt(0) - v.charCodeAt(0);
-  const score = 900 - diff * 40;
+  const score = 900 - diff * 50;
   return score;
 }
