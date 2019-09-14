@@ -41,7 +41,7 @@ function mapEnum(t, nivå) {
     };
     if (src.annotation) {
       const doc = src.annotation[0].documentation[0].split(":");
-      if (doc[1]) e.ingress = doc[1].trim().replace(/\s\s/g, " ");
+      if (doc[1]) e.ingress = { nb: doc[1].trim().replace(/\s\s/g, " ") };
       e.tittel = { nb: doc[0].trim() };
     }
     if (!e.kode) return log.warn("Mangler typen " + kodeautor);
