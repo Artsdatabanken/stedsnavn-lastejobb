@@ -6,7 +6,10 @@ var parseString = require("xml2js").parseString;
 const autor2kode = lastejobb.io.lesDatafil("autor2kode");
 
 // Ustabil link, manuell download: https://register.geonorge.no/register/versjoner/produktspesifikasjoner/kartverket/stedsnavn-for-vanlig-bruk (GML-skjema)
-const xsd = fs.readFileSync("kildedata/StedsnavnForVanligBruk.xsd", "utf8");
+const xsd = fs.readFileSync(
+  "data/stedsnavn-ubehandlet/StedsnavnForVanligBruk.xsd",
+  "utf8"
+);
 
 const r = {
   SN: {
