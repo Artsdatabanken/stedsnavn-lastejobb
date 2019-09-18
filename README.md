@@ -34,26 +34,29 @@ Inneholder alle stedsnavn på følgende format
 | G         | 7        | 20.25671   | 69.6817    | Koppangen        |
 | H         | 35       | 10.84147   | 60.64473   | Lensbygda        |
 
-### kategori.json
+### steder_kategori.json
 
-Inneholder oversettelse fra kategoritekst til tallkode bruker i steder.json.
+Inneholder oversettelse mellom kode og tallkode brukt i `steder.json`.
 
 ```json
-{
-  "ferskvann_ferskvannskontur_nes": 61,
-  "ferskvann_ferskvannskontur_øy": 73,
-  "ferskvann_ferskvannskontur_øygruppe": 179,
-  "ferskvann_ferskvannskontur_strand": 88,
-  "ferskvann_grunnerIFerskvann_banke": 204,
-  "ferskvann_grunnerIFerskvann_grunne": 131,
-  "ferskvann_rennendeVann_bekk": 2,
-  "ferskvann_rennendeVann_elv": 40,
-  "markslag_dyrkamark_eng": 45,
-  "markslag_isOgPermafrost_isbre": 103,
-  "terreng_høyder_hei": 14,
-  "terreng_senkninger_søkk": 55,
-  "terreng_skråninger_bakke": 16,
-  ".....": 999
+  "items": [
+    {
+      "id": 29,
+      "kode": "SN-S-F-F"
+    },
+    {
+      "id": 251,
+      "kode": "SN-S-F-H"
+    },
+    {
+      "id": 30,
+      "kode": "SN-S-F-S"
+    },
+    {
+      "id": 40,
+      "kode": "SN-S-F-HO"
+    }
+  ]
 }
 ```
 
