@@ -4,12 +4,12 @@ const typer = lastejobb.io.lesDatafil("inn_kategori.json");
 
 const kode2autor = {};
 const autor2kode = {};
-const id2kode = [];
+const steder_kategori = [];
 
 assignKode(typer);
 lastejobb.io.skrivDatafil("kode2autor", kode2autor);
 lastejobb.io.skrivDatafil("autor2kode", autor2kode);
-lastejobb.io.skrivBuildfil("id2kode", id2kode);
+lastejobb.io.skrivBuildfil("steder_kategori", steder_kategori);
 
 function assignKode(src, prefix = "SN") {
   const keys = Object.keys(src).sort((a, b) => a.length - b.length);
@@ -18,7 +18,7 @@ function assignKode(src, prefix = "SN") {
     kode2autor[kode] = kodeAutor;
     autor2kode[kodeAutor] = kode;
     const id = src[kodeAutor];
-    if (typeof id === "number") id2kode.push({ id: id, kode: kode });
+    if (typeof id === "number") steder_kategori.push({ id: id, kode: kode });
 
     assignKode(src[kodeAutor], kode);
   });
