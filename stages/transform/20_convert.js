@@ -1,15 +1,15 @@
 const oboe = require("oboe");
 const fs = require("fs");
-const lastejobb = require("lastejobb");
+const { io } = require("lastejobb");
 
-const kategori2id = lastejobb.io.lesDatafil("inn_kategori");
+const kategori2id = io.lesDatafil("inn_kategori");
 
 function round_to_precision(x, precision) {
   const scaler = Math.pow(10, precision);
   return Math.round(x * scaler) / scaler;
 }
 
-lastejobb.io.mkdir("build");
+io.mkdir("build");
 const ws = fs.createWriteStream("build/steder.json");
 oboe(fs.createReadStream("./data/4326.geojson", { encoding: "utf8" }))
   .node("features.*", function(e) {
@@ -34,9 +34,7 @@ oboe(fs.createReadStream("./data/4326.geojson", { encoding: "utf8" }))
     const viktighet = p.sortering.replace("viktighet", "");
     const lng = round_to_precision(coord[0], 5);
     const lat = round_to_precision(coord[1], 5);
-    const line = `${viktighet}${categoryId} ${lng} ${lat} ${
-      p.stedsnummer
-    } ${navn}`;
+    const line = `${viktighet}${categoryId} ${lng} ${lat} ${p.stedsnummer} ${navn}`;
 
     ws.write(line + "\n");
     return oboe.drop;
