@@ -22,7 +22,7 @@ const r = {
 parseString(xsd, function(err, result) {
   const schema = result.schema;
   schema.simpleType.forEach(t => map(t));
-  lastejobb.io.skrivBuildfil("type.json", r);
+  lastejobb.io.skrivDatafil("alle.json", r);
 });
 
 function map(t) {
