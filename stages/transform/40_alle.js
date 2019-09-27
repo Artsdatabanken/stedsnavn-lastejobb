@@ -15,6 +15,7 @@ const r = {
   SN: {
     tittel: { nb: "Sted" },
     nivå: "Steder",
+    foreldre: [],
     farge: "#cecece"
   }
 };
