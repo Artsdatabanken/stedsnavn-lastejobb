@@ -49,9 +49,17 @@ function mapEnum(t, nivå) {
       e.tittel = { nb: doc[0].trim() };
     }
     if (!e.kode) return log.warn("Mangler typen " + kodeautor);
+    else e.foreldre = [forelder(e.kode)];
 
     if (r[e.kode]) throw new Error("Duplikat " + e.kode);
     r[e.kode] = e;
     delete e.kode;
   });
+}
+
+function forelder(kode) {
+  if (!kode) debugger;
+  const segs = kode.split("-");
+  segs.pop();
+  return segs.join("-");
 }

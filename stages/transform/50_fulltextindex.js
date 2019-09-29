@@ -38,7 +38,6 @@ function index(sted) {
   if (!kode) debugger;
   if (navn === "Trondheim") debugger;
   const prio = kk[0];
-  if (prio > "G" && navn.indexOf("rondheim") > 0) debugger;
   fti[stedsnummer] = {
     hit: {
       kode: kode,
