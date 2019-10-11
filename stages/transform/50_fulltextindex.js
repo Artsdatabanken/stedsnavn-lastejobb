@@ -1,18 +1,25 @@
-const lastejobb = require("lastejobb");
+const { io } = require("lastejobb");
 const fs = require("fs");
 
 const steder = fs.readFileSync("build/steder.json", "utf8").split("\n");
 const kat2kode = lesKat2kode();
 
 function lesKat2kode() {
-  const autorkode2index = lastejobb.io.lesDatafil("inn_kategori.json");
+  const autorkode2index = io.lesDatafil("inn_kategori.json");
   const kode2autor = {};
   invert(kode2autor, autorkode2index);
-  const autor2kode = lastejobb.io.lesDatafil("autor2kode.json");
+  const autor2kode = io.lesDatafil("autor2kode.json");
+
+  const type = io.lesBuildfil("type").items;
+  const r = {};
+  type.forEach(e => (r[e.kode] = e));
+
   const s = {};
   Object.entries(kode2autor).forEach(([k, v]) => {
     const kode = autor2kode[v];
-    s[k] = kode;
+    const type = r[kode];
+    if (!type) debugger;
+    s[k] = type;
   });
   return s;
 }
@@ -28,20 +35,21 @@ function invert(r, node) {
 const fti = {};
 
 steder.forEach(s => index(s.split(" ")));
-lastejobb.io.skrivBuildfil("full-text-index-sted.json", fti);
+io.skrivBuildfil("full-text-index-sted.json", fti);
 
 function index(sted) {
   if (sted.length < 5) return; // EOF
   const [kk, lng, lat, stedsnummer, ...navnArr] = sted;
-  const kode = kat2kode[kk.substring(1)];
+  const type = kat2kode[kk.substring(1)];
   const navn = navnArr.join(" ");
-  if (!kode) debugger;
-  if (navn === "Trondheim") debugger;
+  if (!type) debugger;
   const prio = kk[0];
   fti[stedsnummer] = {
     hit: {
-      kode: kode,
-      url: `Sted?lng=${lng}&lat=${lat}`,
+      kode: type.kode,
+      url: type.url,
+      lng,
+      lat, //+ `?lng=${lng}&lat=${lat}`,
       title: navn
     },
     text: {
