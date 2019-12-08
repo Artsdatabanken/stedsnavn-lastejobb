@@ -8,7 +8,7 @@ Utfila er ~25 MB, men likevel behøver man ca. 5 GB diskplass til prosessering.
 
 ### Dataflyt
 
-[![Dataflyt](https://github.com/Artsdatabanken/datakilde-lastejobb/raw/master/doc/dataflyt.png)](https://artsdatabanken.github.io/datakilde-lastejobb/)
+[![Dataflyt](https://github.com/Artsdatabanken/stedsnavn-lastejobb/raw/master/doc/dataflyt.png)](https://artsdatabanken.github.io/stedsnavn-lastejobb/)
 
 ### Tegnforklaring
 
