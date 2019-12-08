@@ -1,6 +1,0 @@
-SELECT ?ssr ?stedLabel ?foto ?sted  WHERE {
-  ?sted wdt:P1850 ?ssr.
-  OPTIONAL { ?sted wdt:P18 ?foto. }
-  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
-  OPTIONAL {  }
-}
