@@ -10,7 +10,7 @@ const geoj = {
   features: []
 };
 
-oboe(fs.createReadStream("./data/4326.geojson", { encoding: "utf8" }))
+oboe(fs.createReadStream("./temp/4326.geojson", { encoding: "utf8" }))
   .node("features.*", function(e) {
     if (e.geometry.type !== "Point") return oboe.drop;
     const p = e.properties;
@@ -24,10 +24,16 @@ oboe(fs.createReadStream("./data/4326.geojson", { encoding: "utf8" }))
     if (coord[0] == -50210 && coord[1] == 6772591) return oboe.drop; // Feilplassert
     if (coord[0] == -40879 && coord[1] == 6650995) return oboe.drop; // Feilplassert
 
-    if (
-      p.navneobjekthovedgruppe !== "flyplass" &&
-      p.navneobjektgruppe !== "flyplasss" &&
+    /*    if (
+      p.navneobjekthovedgruppe !== "flyplass" ||
+      p.navneobjektgruppe !== "flyplasss" ||
       p.navneobjekttype !== "flyplass"
+    )
+      return oboe.drop;*/
+    if (
+      p.navneobjekthovedgruppe !== "bebyggelse" ||
+      p.navneobjektgruppe !== "institusjoner" ||
+      p.navneobjekttype !== "sykehus"
     )
       return oboe.drop;
     geoj.features.push(e);

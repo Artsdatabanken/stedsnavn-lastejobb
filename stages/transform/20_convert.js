@@ -11,7 +11,7 @@ function round_to_precision(x, precision) {
 
 io.mkdir("build");
 const ws = fs.createWriteStream("build/steder.json");
-oboe(fs.createReadStream("./data/4326.geojson", { encoding: "utf8" }))
+oboe(fs.createReadStream("./temp/4326.geojson", { encoding: "utf8" }))
   .node("features.*", function(e) {
     if (e.geometry.type !== "Point") return oboe.drop;
     const p = e.properties;

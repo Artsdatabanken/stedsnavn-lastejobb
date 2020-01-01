@@ -15,7 +15,7 @@ function add(l1, l2, l3) {
   x2[l3] = ++count;
 }
 
-oboe(fs.createReadStream("./data/4326.geojson", { encoding: "utf8" }))
+oboe(fs.createReadStream("./temp/4326.geojson", { encoding: "utf8" }))
   .node("features.*", function(e) {
     const p = e.properties;
     add(p.navneobjekthovedgruppe, p.navneobjektgruppe, p.navneobjekttype);

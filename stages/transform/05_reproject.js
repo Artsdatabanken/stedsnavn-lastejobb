@@ -7,5 +7,5 @@ reproject(
 );
 
 function reproject(src, target, epsg = "EPSG:25833") {
-  execSync(`ogr2ogr -f GeoJSON -t_srs ${epsg} data/${target} data/${src}`);
+  execSync(`ogr2ogr -f GeoJSON -t_srs ${epsg} temp/${target} temp/${src}`);
 }
