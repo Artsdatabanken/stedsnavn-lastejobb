@@ -1,6 +1,6 @@
 const lastejobb = require("lastejobb");
 
-const typer = lastejobb.io.lesDatafil("inn_kategori.json");
+const typer = lastejobb.io.lesTempJson("inn_kategori.json");
 
 const kode2autor = {};
 const autor2kode = {};

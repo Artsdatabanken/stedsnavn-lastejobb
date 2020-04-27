@@ -4,12 +4,12 @@ const fs = require("fs");
 const ikonTarget = "build/ikon";
 if (!fs.existsSync(ikonTarget)) fs.mkdirSync(ikonTarget);
 
-let ikoner = io.lesDatafil("material").items;
-let autor2kode = io.lesDatafil("autor2kode");
+let ikoner = io.lesTempJson("material");
+let autor2kode = io.lesTempJson("autor2kode");
 
 const r = [];
 
-let a2m = io.lesDatafil("stedsnavn-ubehandlet/autorkode2materialicon");
+let a2m = io.lesTempJson("stedsnavn-ubehandlet/autorkode2materialicon");
 Object.keys(a2m).forEach(autorkode => {
   const kode = autor2kode[autorkode];
   const ikonnavn = a2m[autorkode];

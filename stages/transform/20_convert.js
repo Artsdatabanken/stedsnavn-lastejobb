@@ -2,7 +2,7 @@ const oboe = require("oboe");
 const fs = require("fs");
 const { io } = require("lastejobb");
 
-const kategori2id = io.lesDatafil("inn_kategori");
+const kategori2id = io.lesTempJson("inn_kategori");
 
 function round_to_precision(x, precision) {
   const scaler = Math.pow(10, precision);
@@ -12,13 +12,13 @@ function round_to_precision(x, precision) {
 io.mkdir("build");
 const ws = fs.createWriteStream("build/steder.json");
 oboe(fs.createReadStream("./temp/4326.geojson", { encoding: "utf8" }))
-  .node("features.*", function(e) {
+  .node("features.*", function (e) {
     if (e.geometry.type !== "Point") return oboe.drop;
     const p = e.properties;
     if (!p.komplettskrivemåte) return oboe.drop;
     const categoryId =
       kategori2id[p.navneobjekthovedgruppe][p.navneobjektgruppe][
-        p.navneobjekttype
+      p.navneobjekttype
       ];
 
     const coord = e.geometry.coordinates;

@@ -5,12 +5,12 @@ const steder = fs.readFileSync("build/steder.json", "utf8").split("\n");
 const kat2kode = lesKat2kode();
 
 function lesKat2kode() {
-  const autorkode2index = io.lesDatafil("inn_kategori.json");
+  const autorkode2index = io.lesTempJson("inn_kategori.json");
   const kode2autor = {};
   invert(kode2autor, autorkode2index);
-  const autor2kode = io.lesDatafil("autor2kode.json");
+  const autor2kode = io.lesTempJson("autor2kode.json");
 
-  const type = io.lesBuildfil("type").items;
+  const type = io.readJson("./build/type.json").items;
   const r = {};
   type.forEach(e => (r[e.kode] = e));
 
