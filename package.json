@@ -14,7 +14,7 @@
     "author": "",
     "license": "MIT",
     "dependencies": {
-        "lastejobb": "^3.5.0",
+        "lastejobb": "^3.5.1",
         "oboe": "^2.1.5",
         "xml2js": "^0.4.23"
     }
