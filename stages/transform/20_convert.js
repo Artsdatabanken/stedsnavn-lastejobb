@@ -10,7 +10,7 @@ function round_to_precision(x, precision) {
 }
 
 io.mkdir("build");
-const ws = fs.createWriteStream("build/steder.json");
+const ws = fs.createWriteStream("temp/steder.txt");
 oboe(fs.createReadStream("./temp/4326.geojson", { encoding: "utf8" }))
   .node("features.*", function (e) {
     if (e.geometry.type !== "Point") return oboe.drop;
@@ -34,7 +34,7 @@ oboe(fs.createReadStream("./temp/4326.geojson", { encoding: "utf8" }))
     const viktighet = p.sortering.replace("viktighet", "");
     const lng = round_to_precision(coord[0], 5);
     const lat = round_to_precision(coord[1], 5);
-    const line = `${viktighet}${categoryId} ${lng} ${lat} ${p.stedsnummer} ${navn}`;
+    const line = `${p.stedsnummer} ${viktighet}${categoryId} ${lng} ${lat} ${navn}`;
 
     ws.write(line + "\n");
     return oboe.drop;

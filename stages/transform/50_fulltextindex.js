@@ -39,7 +39,7 @@ io.skrivBuildfil("full-text-index-sted.json", fti);
 
 function index(sted) {
   if (sted.length < 5) return; // EOF
-  const [kk, lng, lat, stedsnummer, ...navnArr] = sted;
+  const [stedsnummer, kk, lng, lat, ...navnArr] = sted;
   const type = kat2kode[kk.substring(1)];
   const navn = navnArr.join(" ");
   if (!type) debugger;

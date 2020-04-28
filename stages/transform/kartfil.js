@@ -2,6 +2,8 @@ const oboe = require("oboe");
 const fs = require("fs");
 const { io } = require("lastejobb");
 
+return
+
 io.mkdir("build");
 const geoj = {
   type: "FeatureCollection",
@@ -11,7 +13,7 @@ const geoj = {
 };
 
 oboe(fs.createReadStream("./temp/4326.geojson", { encoding: "utf8" }))
-  .node("features.*", function(e) {
+  .node("features.*", function (e) {
     if (e.geometry.type !== "Point") return oboe.drop;
     const p = e.properties;
     if (!p.komplettskrivemåte) return oboe.drop;
