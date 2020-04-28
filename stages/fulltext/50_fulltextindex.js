@@ -1,8 +1,6 @@
 const { io } = require("lastejobb");
 const fs = require("fs");
 
-return
-
 const steder = fs.readFileSync("build/steder.txt", "utf8").split("\n");
 const kat2kode = lesKat2kode();
 
@@ -12,7 +10,7 @@ function lesKat2kode() {
   invert(kode2autor, autorkode2index);
   const autor2kode = io.lesTempJson("autor2kode.json");
 
-  const type = io.readJson("./build/type.json").items;
+  const type = io.readJson("./build/type.json").items
   const r = {};
   type.forEach(e => (r[e.kode] = e));
 
