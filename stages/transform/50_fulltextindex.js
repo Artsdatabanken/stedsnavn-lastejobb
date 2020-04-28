@@ -1,7 +1,7 @@
 const { io } = require("lastejobb");
 const fs = require("fs");
 
-const steder = fs.readFileSync("build/steder.json", "utf8").split("\n");
+const steder = fs.readFileSync("build/steder.txt", "utf8").split("\n");
 const kat2kode = lesKat2kode();
 
 function lesKat2kode() {
