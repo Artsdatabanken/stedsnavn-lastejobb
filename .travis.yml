@@ -8,6 +8,7 @@ branches:
   only:
     - master
 script:
+  - pwd
   - npm run build
 #  - yarn test
 before_deploy:

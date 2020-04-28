@@ -7,5 +7,9 @@ reproject(
 );
 
 function reproject(src, target, epsg = "EPSG:25833") {
-  execSync(`ogr2ogr -f GeoJSON -t_srs ${epsg} temp/${target} temp/${src}`);
+  const docker = "docker run --rm -v /home:/home osgeo/gdal:alpine-small-latest"
+  const pwd = process.env.PWD
+  const cmd = `ogr2ogr -f GeoJSON -t_srs ${epsg} ${pwd}/temp/${target} ${pwd}/temp/${src}`
+
+  execSync(docker + " " + cmd);
 }
