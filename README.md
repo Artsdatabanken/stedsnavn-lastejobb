@@ -4,6 +4,8 @@ Laster stedsnavn fra sentralt stedsnavn register (SSR). Data brukes av [stedsnav
 
 Utfila er ~25 MB, men likevel behøver man ca. 5 GB diskplass til prosessering.
 
+Filstier som generereres under npm run download er for lange for windows filsystem - eventuelt kjør unde WSL.
+
 ## Komponenter og dataflyt
 
 ### Dataflyt
