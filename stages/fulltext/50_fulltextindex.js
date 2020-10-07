@@ -1,10 +1,27 @@
 const { io } = require("lastejobb");
 const fs = require("fs");
+const readline = require('readline')
 
-const steder = fs.readFileSync("build/steder.txt", "utf8").split("\n");
-const kat2kode = lesKat2kode();
+const kat2kode = lesKategorier();
 
-function lesKat2kode() {
+const outStream = fs.createWriteStream("build/full-text-index-sted.jsonl")
+
+const readInterface = readline.createInterface({
+  input: fs.createReadStream('build/steder.txt'),
+  console: false
+});
+
+readInterface.on('line', function (line) {
+  if (line.length <= 0) return
+
+  index(line.split(" "));
+});
+
+readInterface.on('close', function () {
+  outStream.close()
+})
+
+function lesKategorier() {
   const autorkode2index = io.lesTempJson("inn_kategori.json");
   const kode2autor = {};
   invert(kode2autor, autorkode2index);
@@ -32,11 +49,6 @@ function invert(r, node) {
   });
 }
 
-const fti = {};
-
-steder.forEach(s => index(s.split(" ")));
-io.skrivBuildfil("full-text-index-sted.json", fti);
-
 function index(sted) {
   if (sted.length < 5) return; // EOF
   const [stedsnummer, kk, lng, lat, ...navnArr] = sted;
@@ -44,7 +56,7 @@ function index(sted) {
   const navn = navnArr.join(" ");
   if (!type) debugger;
   const prio = kk[0];
-  fti[stedsnummer] = {
+  const out = {
     hit: {
       kode: type.kode,
       url: type.url,
@@ -56,6 +68,7 @@ function index(sted) {
       [viktighetTilScore(prio)]: [navn]
     }
   };
+  outStream.write(JSON.stringify(out) + "\n")
 }
 
 function viktighetTilScore(v) {
