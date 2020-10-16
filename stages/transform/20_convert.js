@@ -10,7 +10,7 @@ function round_to_precision(x, precision) {
 }
 
 io.mkdir("build");
-const ws = fs.createWriteStream("temp/steder.txt");
+const ws = fs.createWriteStream("temp/steder.csv");
 oboe(fs.createReadStream("./temp/4326.geojson", { encoding: "utf8" }))
   .node("features.*", function (e) {
     if (e.geometry.type !== "Point") return oboe.drop;

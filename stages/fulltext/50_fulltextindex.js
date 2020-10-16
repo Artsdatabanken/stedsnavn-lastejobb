@@ -7,7 +7,7 @@ const kat2kode = lesKategorier();
 const outStream = fs.createWriteStream("build/full-text-index-sted.jsonl")
 
 const readInterface = readline.createInterface({
-  input: fs.createReadStream('build/steder.txt'),
+  input: fs.createReadStream('build/steder.csv'),
   console: false
 });
 
