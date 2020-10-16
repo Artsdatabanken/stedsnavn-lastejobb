@@ -14,7 +14,7 @@ script:
 before_deploy:
   - git tag "$(date +'%Y%m%d-%H%M%S')-$(git log --format=%h -1)"
   - cd build
-  - tar -zcf steder.tar.gz steder.txt
+  - tar -zcf steder.tar.gz steder.csv
 deploy:
   provider: releases
   api_key: $GITHUB_TOKEN
