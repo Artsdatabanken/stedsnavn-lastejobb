@@ -1,4 +1,4 @@
-const { io, url } = require("lastejobb");
+const { io, url } = require("@artsdatabanken/lastejobb");
 
 const r = io.lesTempJson("alle");
 new url(r).assignUrls();

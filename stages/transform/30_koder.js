@@ -1,4 +1,4 @@
-const lastejobb = require("lastejobb");
+const lastejobb = require("@artsdatabanken/lastejobb");
 
 const typer = lastejobb.io.lesTempJson("inn_kategori.json");
 

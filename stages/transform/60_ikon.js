@@ -1,4 +1,4 @@
-const { io } = require("lastejobb");
+const { io } = require("@artsdatabanken/lastejobb");
 
 let ikoner = io.findFiles("temp/icons", ".svg");
 ikoner = ikoner.filter(x => x.indexOf("24px.svg") > 0);
