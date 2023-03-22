@@ -1,0 +1,48 @@
+name: build and publish generic-substring-lookup-api & stedsnavn
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+      - run: npm ci
+      - run: npm run build --if-present
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          repository: artsdatabanken/stedsnavn
+          path: './destinationRepo'
+          token: ${{secrets.PUSH_TOKEN}}
+      - name: Run deployment script
+        run: ./.github/workflows/deploy.sh 
+        shell: bash
+      - name: Create release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "build/*"
+          tag: v_${{ github.run_number }}
+      - name: post to slack
+        run: ./.github/workflows/slack.sh ${{ secrets.POST_SLACK }}
+        shell: bash
+      - name: Push to stedsnavn
+        run: |
+          cd destinationRepo
+          git config --global user.name "GitHub Actions Bot"
+          git config --global user.email "<>"
+          git config --global --list
+          git stage .
+          git commit -m "Updated from stedsnavn-lastejobb v_${{ github.run_number }}"
+          git branch --set-upstream-to master
+          git push https://$USERNAME:$REPO_KEY@github.com/artsdatabanken/stedsnavn.git
+        env:
+          REPO_KEY: ${{secrets.PUSH_TOKEN}}
+          USERNAME: github-actions[bot]
