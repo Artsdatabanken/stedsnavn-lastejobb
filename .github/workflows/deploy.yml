@@ -17,6 +17,8 @@ jobs:
       - run: npm install
       - run: npm update
       - run: npm run download
+      - name: Check downloaded files
+        run: ./.github/workflows/filecheck.sh
       - run: npm run transform
       - name: Checkout
         uses: actions/checkout@v3
