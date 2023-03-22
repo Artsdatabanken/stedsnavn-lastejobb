@@ -1,6 +1,7 @@
 const execSync = require("child_process").execSync;
+const { dops } = require("@artsdatabanken/lastejobb");
 
-reproject(
+/* reproject(
   "Basisdata_0000_Norge_25833_Stedsnavn_GML.gml",
   "4326.geojson",
   "EPSG:4326"
@@ -12,4 +13,16 @@ function reproject(src, target, epsg = "EPSG:25833") {
   const cmd = `ogr2ogr -f GeoJSON -t_srs ${epsg} ${pwd}/temp/${target} ${pwd}/temp/${src}`
 
   execSync(docker + " " + cmd);
-}
+} */
+
+var n = dops.start_gdal(dops.create_container_name('reproject'), 'temp');
+
+const src = '/tmp/Basisdata_0000_Norge_25833_Stedsnavn_GML.gml';
+const target = '/tmp/4326.geojson';
+const epsg = 'EPSG:4326';
+
+const cmd = `ogr2ogr -f GeoJSON -t_srs ${epsg} ${target} ${src}`
+
+dops.exec_docker(n, cmd);
+dops.clean_container(n);
+

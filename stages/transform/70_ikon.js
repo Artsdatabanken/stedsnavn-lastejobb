@@ -1,4 +1,4 @@
-const { io, log } = require("lastejobb");
+const { io, log } = require("@artsdatabanken/lastejobb");
 const fs = require("fs");
 
 const ikonTarget = "build/ikon";

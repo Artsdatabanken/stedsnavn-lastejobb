@@ -1,4 +1,4 @@
-const lastejobb = require("lastejobb");
+const lastejobb = require("@artsdatabanken/lastejobb");
 const log = lastejobb.log;
 const fs = require("fs");
 var parseString = require("xml2js").parseString;
@@ -51,7 +51,11 @@ function mapEnum(t, nivå) {
     if (!e.kode) return log.warn("Mangler typen " + kodeautor);
     else e.foreldre = [forelder(e.kode)];
 
-    if (r[e.kode]) throw new Error("Duplikat " + e.kode);
+    try {
+     if (r[e.kode]) throw new Error("Duplikat " + e.kode);
+    } catch(error) {
+      console.log("Duplikat " + e.kode)
+    }
     r[e.kode] = e;
     delete e.kode;
   });

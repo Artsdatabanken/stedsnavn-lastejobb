@@ -1,6 +1,6 @@
 const oboe = require("oboe");
 const fs = require("fs");
-const lastejobb = require("lastejobb");
+const lastejobb = require("@artsdatabanken/lastejobb");
 
 let count = 1;
 
