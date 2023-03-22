@@ -24,4 +24,5 @@ const epsg = 'EPSG:4326';
 const cmd = `ogr2ogr -f GeoJSON -t_srs ${epsg} ${target} ${src}`
 
 dops.exec_docker(n, cmd);
+dops.clean_container(n);
 
