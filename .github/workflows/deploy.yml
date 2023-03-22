@@ -29,7 +29,7 @@ jobs:
       - name: Create release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "build/*"
+          artifacts: "artifacts.tar"
           tag: v_${{ github.run_number }}
       - name: post to slack
         run: ./.github/workflows/slack.sh ${{ secrets.POST_SLACK }}
