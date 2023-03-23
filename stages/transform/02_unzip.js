@@ -14,7 +14,7 @@ try {
     log.info("Basisdata size: " + basisSize);    
 } catch (error) {
     log.info("Error: " + error);
-    log.info("There was an error reading gml, file - contents of folder is: " + fs.readdir(pwd));
+    log.info("There was an error reading gml, file - contents of folder is: " + pwd);
 }
 
 
