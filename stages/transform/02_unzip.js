@@ -1,5 +1,6 @@
 const { archive } = require("@artsdatabanken/lastejobb");
 const log = require("@artsdatabanken/lastejobb/lib/log");
+const fs = require("fs");
 
 archive.unzip("stedsnavn.zip");
 
