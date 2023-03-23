@@ -1,5 +1,6 @@
 const execSync = require("child_process").execSync;
 const { dops } = require("@artsdatabanken/lastejobb");
+const fs = require("fs");
 
 /* reproject(
   "Basisdata_0000_Norge_25833_Stedsnavn_GML.gml",
@@ -21,8 +22,19 @@ const src = '/tmp/Basisdata_0000_Norge_25833_Stedsnavn_GML.gml';
 const target = '/tmp/4326.geojson';
 const epsg = 'EPSG:4326';
 
+const stedsnavn = "./temp/stedsnavn.zip";
+const basis = "./temp/Basisdata_0000_Norge_25833_Stedsnavn_GML.gml";
+let basisInfo = fs.statSync(basis);
+let fileSize = basisInfo.size / (1024*1024);
+let stedsnavnInfo = fs.statSync(stedsnavn);
+let stedsnavnSize = basisInfo.size / (1024*1024);
+console.log("Basisdata size: ", fileSize);
+console.log("Zip file size: ", stedsnavnSize);
+
+
 const cmd = `ogr2ogr -f GeoJSON -t_srs ${epsg} ${target} ${src}`
 
+
+
 dops.exec_docker(n, cmd);
-//dops.clean_container(n);
 
