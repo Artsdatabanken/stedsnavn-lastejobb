@@ -12,10 +12,17 @@ try {
     let basisInfo = fs.statSync(pwd + "/" + basisUnzipped);
     let basisSize = basisInfo.size / (1024*1024);
     log.info("Basisdata size: " + basisSize);    
-} catch (error) {
-    log.info("Error when reading folder!!!!!!: " + error);
-    let cont = fs.readdir(pwd, console.log(error));
-    log.info("There was an error reading gml, file - contents of folder is: " + cont);
+} catch (err) {
+    fs.readdir(pwd, (err, files) => {
+        if (err)
+          console.log(err);
+        else {
+          console.log("\nCurrent directory filenames:");
+          files.forEach(file => {
+            console.log(file);
+          })
+        }
+      })
 }
 
 
