@@ -13,8 +13,8 @@ try {
     let basisSize = basisInfo.size / (1024*1024);
     log.info("Basisdata size: " + basisSize);    
 } catch (error) {
-    log.info("Error: " + error);
-    let cont = fs.readdir(fs.PathLike(pwd));
+    log.info("Error when reading folder!!!!!!: " + error);
+    let cont = fs.readdir(pwd);
     log.info("There was an error reading gml, file - contents of folder is: " + cont);
 }
 
