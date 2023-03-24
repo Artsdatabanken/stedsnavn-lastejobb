@@ -13,7 +13,8 @@ try {
     let basisSize = basisInfo.size / (1024*1024);
     log.info("Basisdata size: " + basisSize);    
 } catch (err) {
-    fs.readdir(pwd, (err, files) => {
+    let basi = pwd += "/temp";
+    fs.readdir(basi, (err, files) => {
         if (err)
           console.log(err);
         else {
