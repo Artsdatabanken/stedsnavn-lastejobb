@@ -14,7 +14,7 @@ try {
     log.info("Basisdata size: " + basisSize);    
 } catch (error) {
     log.info("Error when reading folder!!!!!!: " + error);
-    let cont = fs.readdir(pwd);
+    let cont = fs.readdir(pwd, console.log(error));
     log.info("There was an error reading gml, file - contents of folder is: " + cont);
 }
 
