@@ -1,6 +1,5 @@
 const { http, log } = require("@artsdatabanken/lastejobb");
 const fs = require("fs");
-const log = require("@artsdatabanken/lastejobb/lib/log");
 
 http
   .downloadBinary(
