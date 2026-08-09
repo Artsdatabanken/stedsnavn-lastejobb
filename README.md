@@ -1,10 +1,35 @@
 # stedsnavn-lastejobb
 
-Laster stedsnavn fra sentralt stedsnavn register (SSR). Data brukes av [stedsnavn-api](https://github.com/Artsdatabanken/stedsnavn-api)
+Lastejobb for å hente, transformere og publisere norske stedsnavn fra SSR (Sentralt stedsnavnregister). Resultatet brukes blant annet av [stedsnavn-api](https://github.com/Artsdatabanken/stedsnavn-api) og til fulltekstsøk.
 
-Utfila er ~25 MB, men likevel behøver man ca. 5 GB diskplass til prosessering.
+Prosjektet er en trinnvis datarørledning bygget med Node.js og [`@artsdatabanken/lastejobb`](https://github.com/Artsdatabanken/lastejobb).
 
-Filstier som generereres under npm run download er for lange for windows filsystem - eventuelt kjør unde WSL.
+## Oversikt
+
+Pipeline består i hovedsak av tre deler:
+
+1. **Download** – laster ned rådata og støttefiler til `temp/`
+2. **Transform** – reprojiserer, mapper, filtrerer og bygger sluttfiler i `build/`
+3. **Deploy** – publiserer utvalgte filer til nedstrøms systemer
+
+Viktige datakilder:
+- Geonorge Stedsnavn i GML-format
+- [`stedsnavn-ubehandlet`](https://github.com/Artsdatabanken/stedsnavn-ubehandlet) med supplerende mappinger
+- Google Material Icons for ikonfiler
+
+## Krav og forutsetninger
+
+Før du kjører prosjektet lokalt bør du ha:
+
+- **Node.js** og **npm**
+- **Docker** eller tilsvarende oppsett som kreves av `@artsdatabanken/lastejobb` for GDAL-steg
+- kommandolinjeverktøy som `unzip`, `sort`, `scp` og `ssh` der det er relevant
+- nok diskplass og minne til å prosessere store filer
+
+Merk:
+- Sluttfilene er relativt små, men prosesseringen kan kreve rundt **5 GB diskplass**
+- `transform` kjøres med stor Node-heap, som tyder på at jobben kan være minnekrevende
+- På Windows kan filstier under `npm run download` bli for lange; bruk gjerne **WSL**
 
 ## Komponenter og dataflyt
 
@@ -19,46 +44,120 @@ Filstier som generereres under npm run download er for lange for windows filsyst
 | ![Dataflyt](https://github.com/Artsdatabanken/nin-arkitektur-dokumentasjon/raw/master/image/api_24.png)  | API (HTTP REST)          |
 | ![Dataflyt](https://github.com/Artsdatabanken/nin-arkitektur-dokumentasjon/raw/master/image/data_24.png) | Åpne data                |
 | ![Dataflyt](https://github.com/Artsdatabanken/nin-arkitektur-dokumentasjon/raw/master/image/kart_24.png) | Kart                     |
-| ![Dataflyt](https://github.com/Artsdatabanken/nin-arkitektur-dokumentasjon/raw/master/image/last_24.png) | Lastejobb / Konvertering |
+| ![Dataflyt](https://github.com/Artsdatabanken/nin-arkitektur-dokumentasjon/raw/master/image/last_24.png) | Lastejobb / konvertering |
 | ![Dataflyt](https://github.com/Artsdatabanken/nin-arkitektur-dokumentasjon/raw/master/image/lib_24.png)  | Bibliotek                |
 | ![Dataflyt](https://github.com/Artsdatabanken/nin-arkitektur-dokumentasjon/raw/master/image/tool_24.png) | Verktøy                  |
 | ![Dataflyt](https://github.com/Artsdatabanken/nin-arkitektur-dokumentasjon/raw/master/image/www_24.png)  | Web-side/applikasjon     |
 
-## Kildedata
+## Installasjon
 
-- [stedsnavn-ubehandlet](https://github.com/Artsdatabanken/stedsnavn-ubehandlet)
-- [Produktspesifikasjon](https://register.geonorge.no/data/documents/Produktspesifikasjoner_Stedsnavn_v2_produktspesifikasjon-kartverket-stedsnavn-5_0_.pdf)
+Installer avhengigheter med:
 
-## Målfiler
+```bash
+npm install
+```
 
-### steder.json
+## Bruk
 
-Inneholder alle stedsnavn på følgende format
+### Last ned kildedata
 
-| Kolonner   | Beskrivelse                                       |
-| ---------- | ------------------------------------------------- |
-| Prioritet  | Bokstav fra A-N hvor N er viktigst (Navn på land) |
-| Kategori   | Kategorisering i 3 nivå av hva navet beskriver    |
-| Lengdegrad | Koordinat på desimalform EPSG:4326                |
-| Breddegrad | Koordinat på desimalform EPSG:4326                |
-| Navn       | Det primære stedsnavnet                           |
+```bash
+npm run download
+```
 
-#### Eksempel
+Kjører stegene i `stages/download/` og laster ned eksterne data og støttefiler til `temp/`.
 
-| Prioritet | Kategori | Breddegrad | Lengdegrad | Navn             |
+### Transformer data
+
+```bash
+npm run transform
+```
+
+Kjører stegene i `stages/transform/` og produserer sluttfiler i `build/`.
+
+Dette er kommandoen du typisk bruker under utvikling når du allerede har kjørt `download`.
+
+### Kjør hele byggejobben
+
+```bash
+npm run build
+```
+
+Kjører først `download`, deretter `transform`.
+
+### Bygg fulltekstindeks
+
+```bash
+npm run fulltext
+```
+
+Kommandoen finnes i `package.json`, men må verifiseres mot faktisk pipeline-oppsett dersom du skal bruke den aktivt.
+
+### Deploy
+
+```bash
+npm run deploy
+```
+
+Kjører deploy-stegene. Dette krever normalt tilgang til eksterne miljøer og hemmeligheter som ikke er tilgjengelige lokalt for alle utviklere.
+
+## Prosjektstruktur
+
+### Viktige kataloger
+
+- `stages/download/` – nedlasting av rådata og støttefiler
+- `stages/transform/` – transformasjon, mapping og generering av sluttfiler
+- `stages/deploy/` – deployskript
+- `build/` – genererte artefakter
+- `temp/` – midlertidige filer og mellomresultater
+- `doc/` – dokumentasjon og produktspesifikasjon
+- `.github/workflows/` – CI/CD-oppsett
+
+### Viktige steg
+
+#### Download
+- `stedsnavn.js` – laster ned hoveddatasettet fra Geonorge
+- `ubehandlet.js` – kloner `stedsnavn-ubehandlet`
+- `material-icons.js` – kloner Material Icons
+
+#### Transform
+- `02_unzip.js` – pakker ut nedlastede filer
+- `05_reproject.js` – reprojiserer data til EPSG:4326 med GDAL/ogr2ogr
+- `10_inn_kategori.js` – bygger intern kategoristruktur fra kildeegenskaper
+- `20_convert.js` – konverterer og filtrerer stedsnavn til mellomformat
+- `25_steder_sort.sh` – sorterer output for stabile differ
+- `30_koder.js` – bygger kodeverk og `steder_kategori.json`
+- `40_alle.js` – leser XSD og bygger typehierarki
+- `45_type.js` – skriver `build/type.json`
+- `50_fulltextindex.js` – genererer fulltekstindeks i JSONL-format
+- `60_ikon.js` – registrerer tilgjengelige ikonfiler
+- `70_ikon.js` – kopierer og kobler ikoner mot kategorier
+
+## Genererte filer
+
+### `build/steder.csv`
+
+Primær datasettfil med stedsnavn. Hver linje inneholder blant annet:
+- stedsnummer
+- prioritet/viktighet
+- kategori-ID
+- lengdegrad og breddegrad i EPSG:4326
+- primærnavn
+
+Eksempel:
+
+| Prioritet | Kategori | Lengdegrad | Breddegrad | Navn             |
 | --------- | -------- | ---------- | ---------- | ---------------- |
 | E         | 11       | 17.3354    | 68.30591   | Storberget       |
 | D         | 14       | 17.32879   | 68.3137    | Erikelva         |
 | E         | 2        | 15.01159   | 68.83431   | Bakkejordstabben |
-| C         | 3        | 14.63289   | 68.54859   | Taen             |
-| G         | 7        | 20.25671   | 69.6817    | Koppangen        |
-| H         | 35       | 10.84147   | 60.64473   | Lensbygda        |
 
-### steder_kategori.json
+### `build/steder_kategori.json`
 
-Inneholder oversettelse mellom kode og tallkode brukt i `steder.json`.
+Oversetter numerisk kategori-ID til intern kode, for eksempel:
 
 ```json
+{
   "items": [
     {
       "id": 29,
@@ -67,149 +166,84 @@ Inneholder oversettelse mellom kode og tallkode brukt i `steder.json`.
     {
       "id": 251,
       "kode": "SN-S-F-H"
-    },
-    {
-      "id": 30,
-      "kode": "SN-S-F-S"
-    },
-    {
-      "id": 40,
-      "kode": "SN-S-F-HO"
     }
   ]
 }
 ```
 
-## Datakilde
+### `build/type.json`
 
-Data lastes fra [Geonorge Stedsnavn](https://kartkatalog.geonorge.no/metadata/kartverket/stedsnavn/30caed2f-454e-44be-b5cc-26bb5c0110ca) i GML-format.
+Beskriver typehierarki, metadata og URL-er for kategorier som brukes videre i API-er og søkeindekser.
 
-## Kataloger
+### `build/full-text-index-sted.jsonl`
 
-- `stages/download`: Script for å laste ned eksterne datafiler til `temp/`
-- `stages/transform`: Script som produserer resultatet og legger det i `build/`
-- `build`: Filene som kommer ut av lastejobben
-- `temp`: Temporær lagring av nedlastede data og mellomformater
+Fulltekstindeks i JSON Lines-format for søk mot stedsnavn.
 
-## Bruk
+### `build/ikon/`
 
-### Installere
+SVG-ikoner koblet til relevante kategorier.
+
+## Datakilder og spesifikasjoner
+
+- [Geonorge Stedsnavn](https://kartkatalog.geonorge.no/metadata/kartverket/stedsnavn/30caed2f-454e-44be-b5cc-26bb5c0110ca)
+- [stedsnavn-ubehandlet](https://github.com/Artsdatabanken/stedsnavn-ubehandlet)
+- [Produktspesifikasjon for stedsnavn](https://register.geonorge.no/data/documents/Produktspesifikasjoner_Stedsnavn_v2_produktspesifikasjon-kartverket-stedsnavn-5_0_.pdf)
+
+## Utvikling og feilsøking
+
+### Anbefalt arbeidsflyt
+
+Ved utvikling er dette ofte nok:
 
 ```bash
-npm run install
-```
-
-Laster ned avhengige biblioteker til `node_modules`.
-
-### Download
-
-```bash
+npm install
 npm run download
+npm run transform
 ```
 
-Laster ned eksterne avhengigheter som lastejobben er avhengig av for å produsere sitt resultat i "transform". Denne kjører stegene som ligger i `stages/download`. Nedlastede data lagres som en konvensjon i katalog `data`.
-
-### Transform
+Hvis du bare endrer transformasjonslogikk og allerede har data i `temp/`, holder det vanligvis å kjøre:
 
 ```bash
 npm run transform
 ```
 
-Bruker allerede nedlastede data til å produsere sitt resultat. Denne brukes gjerne mens man utvikler så man slipper å laste ned data hver gang, og kan også brukes uten at man har tilgang til nett sålenge man har gjort `download` først. Denne kjører stegene som ligger i `stages/transform`
+### Logging
 
-Sluttproduktet av transform skrives som en konvensjon til katalogen `build`.
-
-### Build
+Du kan slå på mer logging ved å sette `DEBUG`:
 
 ```bash
-npm run build
+export DEBUG=*
 ```
 
-Kjører hele lastejobben, først `download`, så `transform`.
-
-### Deploy
+På Windows:
 
 ```bash
-npm run deploy
+set DEBUG=*
 ```
 
-Tar filene fra `build`-katalogen som er produsert i `build` eller `transform` og publiserer disse offentlig slik at andre lastejobber eller konsumenter kan nå dem uten å kjøre lastejobben.
+### Vanlige problemer
 
-## Lage en ny lastejobb
+#### For lange filstier på Windows
+Bruk gjerne WSL eller en kortere sti til prosjektmappen.
 
-Hvis du ønsker å sette opp en ny lastejobb er en enkel måte å gjøre det på å lage en ny katalog for så å be lastejobb-modulen initialisere. Den oppretter et nytt git repo, lager package.json med script for å kjøre lastejobben, README-fil og eksempelsteg.
+#### Manglende systemverktøy
+Noen steg forventer tilgjengelige verktøy som `unzip`, `sort` og Docker/GDAL.
 
-```bash
-$ mkdir minlastejobb && cd minlastejobb
-$ npx lastejobb init
-npx: installed 35 in 2.808s
-  ℹlastejobb Initialiserer lastejobb +0ms
-  ℹlastejobb Initialize Git repo +1ms
-  ℹlastejobb Initialized empty Git repository in /home/b/minlastejobb/.git/ +7ms
-  ℹlastejobb Initialize npm project +1ms
-  ℹlastejobb Wrote to /home/b/minlastejobb/package.json: +163ms
-  ℹlastejobb Installing library lastejobb +0ms
-  ℹlastejobb + lastejobb@2.4.1 +2s
-  ℹlastejobb added 35 packages from 37 contributors and audited 47 packages in 1.589s +1ms
-  ℹlastejobb found 0 vulnerabilities +0ms
-  ℹlastejobb Add scripts to package.json +0ms
-  ℹlastejobb Create index.js +1ms
-  ℹlastejobb Make directory stages +1ms
-  ℹlastejobb Make directory stages/download +0ms
-  ℹlastejobb Make directory stages/transform +1ms
-  ℹlastejobb Create stages/download/10_sample.js +0ms
-  ℹlastejobb Create stages/transform/10_sample.js +0ms
-  ℹlastejobb Create README.md +1ms
-```
+#### Deploy feiler lokalt
+Deploy krever normalt nettverkstilgang, SSH-tilgang og hemmeligheter som kun finnes i CI eller hos drift.
 
-## API
+#### Høyt ressursforbruk
+Jobben håndterer store geodatafiler. Sørg for nok diskplass og minne før du kjører hele pipeline lokalt.
 
-### Lastejobb API
+## CI/CD
 
-```bash
-const lastejobb = require('lastejobb')
-```
+Prosjektet bruker GitHub Actions for bygg og publisering. Det finnes også en eldre `.travis.yml` i repoet, men GitHub Actions ser ut til å være hovedløpet i dag.
 
-| Funksjon             | Beskrivelse                                                  |
-| -------------------- | ------------------------------------------------------------ |
-| kjørLastejobberUnder | Kjører alle javascript i angitt katalog eller underkataloger |
-| kjørLastejobb        | Kjører 1 enkelt lastejobb spesifisert med filnavn            |
+Relevant workflow:
+- `.github/workflows/deploy.yml`
 
-### io
+## Relaterte prosjekter
 
-```bash
-const {io} = require('lastejobb')
-```
-
-Funksjoner for å lese eller skrive til filer (typisk JSON, tekst eller binære filer)
-
-Katalog for build output kan overstyres ved å sette environment variabel BUILD.
-
-Se https://github.com/Artsdatabanken/lastejobb/blob/master/lib/io.js
-
-### http
-
-```bash
-const {http} = require('lastejobb')
-```
-
-Funksjoner for å lese JSON eller binære filer fra web.
-
-Se https://github.com/Artsdatabanken/lastejobb/blob/master/lib/http.js
-
-### log
-
-```bash
-const {log} = require('lastejobb')
-```
-
-Slå på logging ved å sette environment variabel
-
-- `export DEBUG=*` (Linux)
-- `set DEBUG=*` (Windows)
-
-Funksjoner for logging fra lastejobben
-
-Se https://github.com/bjornreppen/log-less-fancy#readme
-
-## Testing new building
+- [stedsnavn-api](https://github.com/Artsdatabanken/stedsnavn-api)
+- [stedsnavn-ubehandlet](https://github.com/Artsdatabanken/stedsnavn-ubehandlet)
+- [@artsdatabanken/lastejobb](https://github.com/Artsdatabanken/lastejobb)
